@@ -10,7 +10,7 @@ from orbit import ISS
 sense = SenseHat()
 CONST_TIME_HOURS = 3
 CONST_TIME_MIN = 1
-SLEEP = 8
+CONST_SLEEP_TIME = 5
 #TODO Change back to 3 hours
 
 def sense_get_data():
@@ -59,37 +59,46 @@ if __name__ == '__main__':
   logger.info('Starting data collection!')
 
   while datetime.now() < endtime:
+    begin = datetime.now()
+    try:
+      o = sense.get_orientation()
+      time_stamp = datetime.now()
+      pitch2 = round(o["pitch"], 2)
+      roll2 = round(o["roll"], 2)
+      yaw2 = round(o["yaw"], 2)
 
-    o = sense.get_orientation()
-    time_stamp = datetime.now()
-    pitch2 = round(o["pitch"], 2)
-    roll2 = round(o["roll"], 2)
-    yaw2 = round(o["yaw"], 2)
-
-    coords = ISS.coordinates()
-    lat = coords.latitude
-    longit = coords.longitude
-    #print('\nLat:{}\nLon:{}\n'.format(lat, longit))
-    data_file.write('\nLat: {}\nLong: {}'.format( str(lat),str(longit)))
-    data_file.flush()
-
-    sense_mag_data, sense_acc_data = sense_get_data()
-    #TODO write it to file
-    data_file.write('\n{} \n{}'.format(sense_mag_data, sense_acc_data))
-    data_file.flush()
-
-    if pitch2 != pitch or roll2 != roll or yaw2 != yaw:
-    
-      pitch = pitch2
-      roll = roll2
-      yaw = yaw2
-      #print('\nP: {} \nR: {}\nY: {} \nT: {}'.format(pitch2, roll2, yaw2, time_stamp))
-      data_file.write('\nP: {} \nR: {}\nY: {}\nT: {}\n'.format(str(pitch2), str(roll2), str(yaw2), str(time_stamp)))
+      coords = ISS.coordinates()
+      lat = coords.latitude
+      longit = coords.longitude
+      #print('\nLat:{}\nLon:{}\n'.format(lat, longit))
+      data_file.write('\nLat: {}\nLong: {}'.format( str(lat),str(longit)))
       data_file.flush()
-      
-      
-    elif pitch2 == pitch and roll2 == roll and yaw2 == yaw:
-      data_file.write('\nNo change\n')
-      data_file.flush
-    sleep(SLEEP)
-    #TODO add try-except incase for errors, and make sure to log them
+
+      sense_mag_data, sense_acc_data = sense_get_data()
+      #TODO write it to file
+      data_file.write('\n{} \n{}'.format(sense_mag_data, sense_acc_data))
+      data_file.flush()
+
+      if pitch2 != pitch or roll2 != roll or yaw2 != yaw:
+
+        pitch = pitch2
+        roll = roll2
+        yaw = yaw2
+        #print('\nP: {} \nR: {}\nY: {} \nT: {}'.format(pitch2, roll2, yaw2, time_stamp))
+        data_file.write('\nP: {} \nR: {}\nY: {}\nT: {}\n'.format(str(pitch2), str(roll2), str(yaw2), str(time_stamp)))
+        data_file.flush()
+
+
+      elif pitch2 == pitch and roll2 == roll and yaw2 == yaw:
+        data_file.write('\nNo change\n')
+        data_file.flush
+    except Exception as e:
+      logger.error(f"Error in {e.__class__.__name__}, {e}")
+      seconds = (datetime.now() - begin).total_seconds()
+      sleep_time = CONST_SLEEP_TIME - seconds
+      if sleep_time > 0:
+          sleep(sleep_time)
+      else:
+          logger.warning(f"Experiment is taking too long! (+{abs(sleep_time)} seconds!)")
+
+        #TODO comments
