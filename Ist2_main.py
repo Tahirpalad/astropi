@@ -55,7 +55,7 @@ if __name__ == '__main__':
       logger.info("Made data folder")
   data_file = open(file=f"{ist2_data_folder}/data.txt", mode='a')
   logger.info("Opened data file")
-  endtime = datetime.now() + timedelta(hours = CONST_TIME_HOURS #TODO Change back to 3 hours
+  endtime = datetime.now() + timedelta(hours = CONST_TIME_HOURS) #TODO Change back to 3 hours
   logger.info('Starting data collection!')
   size_mb = 0.0
   while datetime.now() < endtime:
