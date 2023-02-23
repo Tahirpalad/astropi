@@ -54,31 +54,31 @@ if __name__ == '__main__':
   
   
   #Display an image to show that the experiment is running  
-  b = (255, 0, 0) # SaddleBrown 
-  p = (255, 0, 0) # DarkOrange
+  b = (255, 0, 0) # red
+  p = (255, 0, 0) # red
   c = (0, 0, 0) # Black
   r = (255,255,255) #(rgb.red, rgb.green, rgb.blue)
   
 
   image2 = [
-  	c, b, c, b, b, b, c, c,
-  	c, b, b, p, p, p, b, c,
-    c, b, b, b, p, c, p, b,
-    c, b, b, b, b, c, p, b,
-    c, b, b, b, c, p, p, b,
-  	c, b, b, c, c, p, b, b,
-    c, b, c, c, c, b, b, c,
+  	c, b, c, c, c, c, c, c,
+  	c, b, b, c, c, c, c, c,
+    c, b, b, b, c, c, c, c,
+    c, b, b, b, b, c, c, c,
+    c, b, b, b, c, c, c, c,
+  	c, b, b, c, c, c, c, c,
+    c, b, c, c, c, c, c, c,
     c, c, c, c, c, c, c, c] 
     
   image = [
-  	r, r, b, b, b, b, r, r,
-  	r, b, p, p, p, p, b, r,
-    b, p, c, p, p, c, p, b,
-    b, p, c, p, p, c, p, b,
-    b, p, p, p, p, p, p, b,
-  	b, b, p, c, c, p, b, b,
-    r, b, b, p, p, b, b, r,
-    r, r, r, b, b, r, r, r]
+  	c, c, c, c, b, c, c, c,
+  	c, c, c, c, b, b, c, c,
+    c, c, c, c, b, b, b, c,
+    c, c, c, c, b, b, b, b,
+    c, c, c, c, b, b, b, c,
+  	c, c, c, c, b, b, c, c,
+    c, c, c, c, b, c, c, c,
+    c, c, c, c, c, c, c, c]
 
   
     
