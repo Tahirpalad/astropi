@@ -6,10 +6,10 @@ from os import mkdir, remove
 from os.path import exists, getsize
 from time import sleep
 from orbit import ISS
+from numpy import ceil
 
 sense = SenseHat()
 CONST_TIME_HOURS = 3
-CONST_TIME_MIN = 1
 CONST_SLEEP_TIME = 5
 #TODO Change back to 3 hours
 
@@ -53,11 +53,11 @@ if __name__ == '__main__':
   if not exists(path=ist2_data_folder):
       mkdir(path=ist2_data_folder)
       logger.info("Made data folder")
-  data_file = open(file=f"{ist2_data_folder}/orientation_data.txt", mode='a')
+  data_file = open(file=f"{ist2_data_folder}/data.txt", mode='a')
   logger.info("Opened data file")
-  endtime = datetime.now() + timedelta(minutes = CONST_TIME_MIN) #TODO Change back to 3 hours
+  endtime = datetime.now() + timedelta(hours = CONST_TIME_HOURS #TODO Change back to 3 hours
   logger.info('Starting data collection!')
-
+  size_mb = 0.0
   while datetime.now() < endtime:
     begin = datetime.now()
     try:
@@ -92,13 +92,18 @@ if __name__ == '__main__':
       elif pitch2 == pitch and roll2 == roll and yaw2 == yaw:
         data_file.write('\nNo change\n')
         data_file.flush
+      
     except Exception as e:
       logger.error(f"Error in {e.__class__.__name__}, {e}")
-      seconds = (datetime.now() - begin).total_seconds()
-      sleep_time = CONST_SLEEP_TIME - seconds
-      if sleep_time > 0:
-          sleep(sleep_time)
-      else:
-          logger.warning(f"Experiment is taking too long! (+{abs(sleep_time)} seconds!)")
-
+    seconds = (datetime.now() - begin).total_seconds()
+    sleep_time = CONST_SLEEP_TIME - seconds
+    if sleep_time > 0:
+        sleep(sleep_time)
+    else:
+        logger.warning(f"Experiment is taking too long! (+{abs(sleep_time)} seconds!)")
+    size_mb += getsize(ist2_data_folder) / 1000000.0  
+  data_file.write(f'Ended experiment ----> {ceil(size_mb)} MB\n')
+  data_file.flush()
+  data_file.close()
+  logger.info('Experiment finished, end of log.')
         #TODO comments
