@@ -7,10 +7,11 @@ from os.path import exists, getsize
 from time import sleep
 from orbit import ISS
 from numpy import ceil
+from datetime import timezone
 
 sense = SenseHat()
 sense.clear()
-CONST_TIME_HOURS = 2
+CONST_TIME_MINUTES = 177
 CONST_SLEEP_TIME = 5
 
 
@@ -98,14 +99,14 @@ if __name__ == '__main__':
   data_file = open(file=f"{ist2_data_folder}/data.txt", mode='a')
   logger.info("Opened data file")
   #Finds the time at which the experiment will finish
-  endtime = datetime.now() + timedelta(hours = CONST_TIME_HOURS) 
+  endtime = datetime.now(timezone.utc) + timedelta(minutes = CONST_TIME_MINUTES) 
   logger.info('Starting data collection!')
   size_mb = 0.0
   sense.clear(b)
   imageshown = 1
 
-  while datetime.now() < endtime:
-    begin = datetime.now()
+  while datetime.now(timezone.utc) < endtime:
+    begin = datetime.now(timezone.utc)
     # Display the image
     if (imageshown % 5 == 1):
         sense.set_pixels(image)
@@ -121,7 +122,7 @@ if __name__ == '__main__':
     try:
       
       o = sense.get_orientation()
-      time_stamp = datetime.now()
+      time_stamp = datetime.now(timezone.utc)
       pitch2 = round(o["pitch"], 2)
       roll2 = round(o["roll"], 2)
       yaw2 = round(o["yaw"], 2)
@@ -155,7 +156,7 @@ if __name__ == '__main__':
     except Exception as e:
       logger.error(f"Error in {e.__class__.__name__}, {e}")
       print('Catching exception')
-    seconds = (datetime.now() - begin).total_seconds()
+    seconds = (datetime.now(timezone.utc) - begin).total_seconds()
     sleep_time = CONST_SLEEP_TIME - seconds
     if sleep_time > 0:
         sleep(sleep_time)
