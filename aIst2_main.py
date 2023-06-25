@@ -15,9 +15,6 @@ CONST_TIME_MINUTES = 177
 CONST_SLEEP_TIME = 5
 
 
-
-#TODO Change back to 3 hours
-
 def sense_get_data():
   '''Function to get acceleration and magnetic data'''
   sense_mag_data = []
